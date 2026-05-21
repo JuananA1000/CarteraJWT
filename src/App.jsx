@@ -66,17 +66,31 @@ function App() {
   }, []);
 
   return (
-    <div id='center'>
-      <h1 className='title'>Cartera de credenciales con JWT</h1>
+    <div id='center' className='app-shell'>
+      <header className='hero-panel'>
+        <p className='eyebrow'>Identidad digital</p>
+        <h1 className='title'>Cartera de credenciales con JWT</h1>
+        <p className='hero-copy'>Crea, firma y verifica credenciales digitales con un diseño moderno y seguro.</p>
+      </header>
 
-      <CredentialForm onCreate={createCredential} />
+      <section className='panel panel-form'>
+        <CredentialForm onCreate={createCredential} />
+      </section>
 
-      <hr />
+      <section className='panel panel-list'>
+        <div className='panel-header'>
+          <h2 className='subtitle'>Mis Credenciales</h2>
+          <p className='panel-note'>Cada credencial se firma y verifica automáticamente.</p>
+        </div>
 
-      <h2 className='subtitle'>Mis Credenciales</h2>
-      {credentials.map((credential, index) => (
-        <CredentialCard key={index} credential={credential} verified={credential.verified} />
-      ))}
+        {credentials.length === 0 ? (
+          <p className='empty-state'>Aún no tienes credenciales. Crea una para verlas aquí.</p>
+        ) : (
+          credentials.map((credential, index) => (
+            <CredentialCard key={index} credential={credential} verified={credential.verified} />
+          ))
+        )}
+      </section>
     </div>
   );
 }

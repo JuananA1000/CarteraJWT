@@ -1,25 +1,26 @@
+import './CredentialCard.css';
+
 export default function CredentialCard({ credential, verified }) {
   return (
-    <div
-      style={{
-        border: '1px solid gray',
-        padding: 16,
-        marginBottom: 10,
-      }}>
-      <h3>{credential.type}</h3>
+    <article className='credential-card'>
+      <div className='card-top'>
+        <span className='badge badge-type'>{credential.type}</span>
+        <span className={`badge badge-status ${verified ? 'verified' : 'invalid'}`}>
+          {verified ? 'Verificado' : 'Inválido'}
+        </span>
+      </div>
 
-      <p>Name: {credential.name}</p>
+      <h3 className='card-title'>{credential.name}</h3>
 
-      <p>
-        Status:
-        {verified ? ' ✅ Verified' : ' ❌ Invalid'}
-      </p>
+      <div className='card-meta'>
+        <span className='meta-key'>Emitida por</span>
+        <span className='meta-value'>{credential.issuer}</span>
+      </div>
 
-      <details>
-        <summary>JWT</summary>
-
+      <details className='jwt-details'>
+        <summary>Ver JWT</summary>
         <pre>{credential.jwt}</pre>
       </details>
-    </div>
+    </article>
   );
 }
