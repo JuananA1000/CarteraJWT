@@ -19,7 +19,7 @@ export default function CredentialCard({ credential, verified }) {
 
       <details className='jwt-details'>
         <summary>Ver JWT</summary>
-        <pre>{credential.jwt}</pre>
+        <pre>{credential.jwt.slice(0, 10) + '...'}</pre>
       </details>
     </article>
   );
