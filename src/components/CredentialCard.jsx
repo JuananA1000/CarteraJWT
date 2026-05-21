@@ -1,21 +1,26 @@
+import employeeIcon from '../svg/employee.svg';
+import gymIcon from '../svg/gym.svg';
+import studentIcon from '../svg/student.svg';
+
 import './CredentialCard.css';
+
+const icons = {
+  employee: employeeIcon,
+  gym: gymIcon,
+  student: studentIcon,
+};
 
 export default function CredentialCard({ credential, verified }) {
   return (
-    <article className='credential-card'>
+    <article className={`credential-card ${credential.type}`}>
       <div className='card-top'>
-        <span className='badge badge-type'>{credential.type}</span>
+        <img src={icons[credential.type]} alt={`${credential.type} icon`}  width={50}/>
         <span className={`badge badge-status ${verified ? 'verified' : 'invalid'}`}>
           {verified ? 'Verificado' : 'Inválido'}
         </span>
       </div>
 
       <h3 className='card-title'>{credential.name}</h3>
-
-      <div className='card-meta'>
-        <span className='meta-key'>Emitida por</span>
-        <span className='meta-value'>{credential.issuer}</span>
-      </div>
 
       <details className='jwt-details'>
         <summary>Ver JWT</summary>
