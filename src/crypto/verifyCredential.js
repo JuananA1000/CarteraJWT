@@ -1,6 +1,6 @@
 import { jwtVerify } from 'jose';
 
-export async function verifyCredential(token, publicKey) {
+export default async function verifyCredential(token, publicKey) {
   try {
     const { payload } = await jwtVerify(token, publicKey);
 
