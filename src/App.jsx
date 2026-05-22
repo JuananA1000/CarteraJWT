@@ -45,7 +45,7 @@ function App() {
     const newCredential = {
       ...payload,
       jwt,
-      verified: verification.valid,
+      // verified: verification.valid,
     };
 
     const updated = [...credentials, newCredential];
@@ -78,18 +78,17 @@ function App() {
       <section className='panel panel-list'>
         <div className='panel-header'>
           <h2 className='subtitle'>Mis Credenciales</h2>
-          <p className='panel-note'>Cada credencial se firma y verifica automáticamente.</p>
         </div>
 
         <div className='credentials-container'>
-        {credentials.length === 0 ? (
-          <p className='empty-state'>Aún no tienes credenciales. Crea una para verlas aquí.</p>
-        ) : (
-          credentials.map((credential, index) => (
+          {credentials.length === 0 ? (
+            <p className='empty-state'>Aún no tienes credenciales. Crea una para verlas aquí.</p>
+          ) : (
+            credentials.map((credential, index) => (
               <CredentialCard key={index} credential={credential} verified={credential.verified} />
             ))
           )}
-          </div>
+        </div>
       </section>
     </div>
   );
