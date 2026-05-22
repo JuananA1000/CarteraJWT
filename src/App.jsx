@@ -14,6 +14,19 @@ function App() {
   const [issuers, setIssuers] = useState(null);
   const [credentials, setCredentials] = useState([]);
 
+  function getIssuer(type) {
+    switch (type) {
+      case 'student':
+        return issuers?.university;
+      case 'gym':
+        return issuers?.gym;
+      case 'employee':
+        return issuers?.company;
+      default:
+        return null;
+    }
+  }
+
   async function createCredential(data) {
     if (!issuers) return;
 
@@ -40,18 +53,34 @@ function App() {
 
     const jwt = await signCredential(payload, issuer.privateKey);
 
-    const verification = await verifyCredential(jwt, issuer.publicKey);
-
     const newCredential = {
       ...payload,
       jwt,
-      // verified: verification.valid,
+      verified: null,
     };
 
     const updated = [...credentials, newCredential];
 
     setCredentials(updated);
 
+    localStorage.setItem('credentials', JSON.stringify(updated));
+  }
+
+  async function handleVerifyCredential(index) {
+    const credential = credentials[index];
+    if (!credential) return;
+
+    const issuer = getIssuer(credential.type);
+    if (!issuer) return;
+
+    const verification = await verifyCredential(credential.jwt, issuer.publicKey);
+    const updated = [...credentials];
+    updated[index] = {
+      ...credential,
+      verified: verification.valid,
+    };
+
+    setCredentials(updated);
     localStorage.setItem('credentials', JSON.stringify(updated));
   }
 
@@ -85,7 +114,12 @@ function App() {
             <p className='empty-state'>Aún no tienes credenciales. Crea una para verlas aquí.</p>
           ) : (
             credentials.map((credential, index) => (
-              <CredentialCard key={index} credential={credential} verified={credential.verified} />
+              <CredentialCard
+                key={index}
+                credential={credential}
+                verified={credential.verified}
+                onVerify={() => handleVerifyCredential(index)}
+              />
             ))
           )}
         </div>

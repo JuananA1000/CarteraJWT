@@ -10,14 +10,18 @@ const icons = {
   student: studentIcon,
 };
 
-export default function CredentialCard({ credential, verified }) {
+export default function CredentialCard({ credential, verified, onVerify }) {
+  const statusLabel = verified === null ? 'Verificar' : verified ? 'Verificado' : 'Inválido';
+  const statusClass = verified === null ? 'pending' : verified ? 'verified' : 'invalid';
+
   return (
     <article className={`credential-card ${credential.type}`}>
       <div className='card-top'>
-        <img src={icons[credential.type]} alt={`${credential.type} icon`}  width={50}/>
-        <span className={`badge badge-status ${verified ? 'verified' : 'invalid'}`}>
-          {verified ? 'Verificado' : 'Inválido'}
-        </span>
+        <img src={icons[credential.type]} alt={`${credential.type} icon`} width={50} />
+
+        <button className={`badge badge-status ${statusClass}`} onClick={onVerify}>
+          {statusLabel}
+        </button>
       </div>
 
       <h3 className='card-title'>{credential.name}</h3>
