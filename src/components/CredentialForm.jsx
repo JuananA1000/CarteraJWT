@@ -35,9 +35,9 @@ export default function CredentialForm({ onCreate }) {
 
         <label className='form-label'>Tipo de credencial</label>
         <select className='form-control' value={type} onChange={(e) => setType(e.target.value)}>
-          <option value='student'>Student ID</option>
-          <option value='gym'>Gym Membership</option>
-          <option value='employee'>Employee Badge</option>
+          <option value='student'>Estudiante</option>
+          <option value='gym'>Membresía de Gimnasio</option>
+          <option value='employee'>Identificación de Empleado</option>
         </select>
       </div>
 
