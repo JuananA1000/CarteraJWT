@@ -1,6 +1,7 @@
 import employeeIcon from '../svg/employee.svg';
 import gymIcon from '../svg/gym.svg';
 import studentIcon from '../svg/student.svg';
+import copyIcon from '../svg/copy.svg';
 
 import './CredentialCard.css';
 
@@ -8,11 +9,17 @@ const icons = {
   employee: employeeIcon,
   gym: gymIcon,
   student: studentIcon,
+  copy: copyIcon,
 };
 
 export default function CredentialCard({ credential, verified, onVerify }) {
   const statusLabel = verified === null ? 'Pendiente' : verified ? 'Verificado' : 'Inválido';
   const statusClass = verified === null ? 'pending' : verified ? 'verified' : 'invalid';
+
+  function copiarJWT() {
+    navigator.clipboard.writeText(credential.jwt);
+    alert('JWT copiado al portapapeles');
+  }
 
   return (
     <article className={`credential-card ${credential.type}`}>
@@ -28,7 +35,10 @@ export default function CredentialCard({ credential, verified, onVerify }) {
 
       <details className='jwt-details'>
         <summary>Ver JWT</summary>
-        <pre>{credential.jwt.slice(0, 10) + '...'}</pre>
+        <pre>
+          {credential.jwt.slice(0, 10) + '...'}
+          <img src={icons.copy} alt={'copy icon'} width={20} onClick={copiarJWT} />
+        </pre>
       </details>
     </article>
   );
