@@ -11,7 +11,7 @@ const icons = {
 };
 
 export default function CredentialCard({ credential, verified, onVerify }) {
-  const statusLabel = verified === null ? 'Verificar' : verified ? 'Verificado' : 'Inválido';
+  const statusLabel = verified === null ? 'Pendiente' : verified ? 'Verificado' : 'Inválido';
   const statusClass = verified === null ? 'pending' : verified ? 'verified' : 'invalid';
 
   return (
