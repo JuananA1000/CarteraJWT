@@ -3,6 +3,8 @@ import gymIcon from '../svg/gym.svg';
 import studentIcon from '../svg/student.svg';
 import copyIcon from '../svg/copy.svg';
 
+import Tooltip from './Tooltip';
+
 import './CredentialCard.css';
 
 const icons = {
@@ -24,7 +26,9 @@ export default function CredentialCard({ credential, verified, onVerify }) {
   return (
     <article className={`credential-card ${credential.type}`}>
       <div className='card-top'>
-        <img src={icons[credential.type]} alt={`${credential.type} icon`} width={50} />
+        <Tooltip text={`Credencial de ${credential.type}`}>
+          <img src={icons[credential.type]} alt={`${credential.type} icon`} width={50} />
+        </Tooltip>
 
         <button className={`badge badge-status ${statusClass}`} onClick={onVerify}>
           {statusLabel}
