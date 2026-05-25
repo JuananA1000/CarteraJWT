@@ -5,90 +5,90 @@ import CredentialCard from './components/CredentialCard';
 
 import createIssuers from './data/issuers';
 
-import signCredential from './crypto/signCredential';
+import firmarCredencial from './crypto/signCredential';
 import verifyCredential from './crypto/verifyCredential';
 
 import './App.css';
 
 function App() {
-  const [issuers, setIssuers] = useState(null);
-  const [credentials, setCredentials] = useState([]);
+  const [emisores, setEmisores] = useState(null);
+  const [credenciales, setCredenciales] = useState([]);
 
-  function getIssuer(type) {
-    switch (type) {
+  function seleccionarEmisor(tipoEmisor) {
+    switch (tipoEmisor) {
       case 'student':
-        return issuers?.university;
+        return emisores?.university;
       case 'gym':
-        return issuers?.gym;
+        return emisores?.gym;
       case 'employee':
-        return issuers?.company;
+        return emisores?.company;
       default:
         return null;
     }
   }
 
-  async function createCredential(data) {
-    if (!issuers) return;
+  async function crearCredencial(data) {
+    if (!emisores) return;
 
-    let issuer;
+    let emisor;
 
     switch (data.type) {
       case 'student':
-        issuer = issuers.university;
+        emisor = emisores.university;
         break;
 
       case 'gym':
-        issuer = issuers.gym;
+        emisor = emisores.gym;
         break;
 
       case 'employee':
-        issuer = issuers.company;
+        emisor = emisores.company;
         break;
     }
 
     const payload = {
       ...data,
-      issuer: data.type,
+      emisor: data.type,
     };
 
-    const jwt = await signCredential(payload, issuer.privateKey);
+    const jwt = await firmarCredencial(payload, emisor.privateKey);
 
-    const newCredential = {
+    const nuevaCredencial = {
       ...payload,
       jwt,
       verified: null,
     };
 
-    const updated = [...credentials, newCredential];
+    const updated = [...credenciales, nuevaCredencial];
 
-    setCredentials(updated);
+    setCredenciales(updated);
 
     localStorage.setItem('credentials', JSON.stringify(updated));
   }
 
   async function handleVerifyCredential(index) {
-    const credential = credentials[index];
-    if (!credential) return;
+    const credencial = credenciales[index];
+    if (!credencial) return;
 
-    const issuer = getIssuer(credential.type);
-    if (!issuer) return;
+    const emisor = seleccionarEmisor(credencial.type);
+    if (!emisor) return;
 
-    const verification = await verifyCredential(credential.jwt, issuer.publicKey);
-    const updated = [...credentials];
+    const verification = await verifyCredential(credencial.jwt, emisor.publicKey);
+    const updated = [...credenciales];
     updated[index] = {
-      ...credential,
+      ...credencial,
       verified: verification.valid,
     };
 
-    setCredentials(updated);
+    setCredenciales(updated);
     localStorage.setItem('credentials', JSON.stringify(updated));
   }
 
   useEffect(() => {
     async function init() {
-      const generatedIssuers = await createIssuers();
+      const crearEmisores = await createIssuers();
 
-      setIssuers(generatedIssuers);
+      setEmisores(crearEmisores);
     }
 
     init();
@@ -101,7 +101,7 @@ function App() {
       </header>
 
       <section className='panel panel-form'>
-        <CredentialForm onCreate={createCredential} />
+        <CredentialForm onCreate={crearCredencial} />
       </section>
 
       <section className='panel panel-list'>
@@ -110,14 +110,14 @@ function App() {
         </div>
 
         <div className='credentials-container'>
-          {credentials.length === 0 ? (
+          {credenciales.length === 0 ? (
             <p className='empty-state'>Aún no tienes credenciales. Crea una para verlas aquí.</p>
           ) : (
-            credentials.map((credential, index) => (
+            credenciales.map((credencial, index) => (
               <CredentialCard
                 key={index}
-                credential={credential}
-                verified={credential.verified}
+                credential={credencial}
+                verified={credencial.verified}
                 onVerify={() => handleVerifyCredential(index)}
               />
             ))
